@@ -2,6 +2,8 @@
 
 import logging.config
 logging.config.fileConfig("config_logging.ini")
+
+import logging
 logger=logging.getLogger("http_monitor")
 try:
 	import urllib2
