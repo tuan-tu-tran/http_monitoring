@@ -7,7 +7,7 @@ try:
 	import urllib2
 	import ConfigParser
 	config=ConfigParser.SafeConfigParser()
-	config.read("config.ini")
+	config.read(["config.ini", "config_custom.ini"])
 	url=config.get("general","url")
 	with open(config.get("general","template")) as fh:
 		template=fh.read()
