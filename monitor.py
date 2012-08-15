@@ -26,13 +26,28 @@ try:
 	with open(config.get("general","template")) as fh:
 		template=fh.read()
 	import urllib2
+	import datetime
 	resp=urllib2.urlopen(url)
 	page=resp.read()
 	resp.close()
 	if page!=template:
-		logger.warn("content is not ok")
+		log=logger.warn
+		ok="not ok"
+		extra="\nexpected %i chars, got %i chars"%(
+			len(template),
+			len(page),
+		)
 	else:
-		logger.info("content is ok")
+		log=logger.info
+		ok="ok"
+		extra=""
+	msg="content at %s is %s for url: %s%s"%(
+		datetime.datetime.now(),
+		ok,
+		url,
+		extra,
+	)
+	log(msg)
 except:
 	import traceback
 	s=traceback.format_exc()
