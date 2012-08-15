@@ -6,13 +6,13 @@ logging.config.fileConfig("config_logging.ini")
 import logging
 logger=logging.getLogger("http_monitor")
 try:
-	import urllib2
 	import ConfigParser
 	config=ConfigParser.SafeConfigParser()
 	config.read(["config.ini", "config_custom.ini"])
 	url=config.get("general","url")
 	with open(config.get("general","template")) as fh:
 		template=fh.read()
+	import urllib2
 	resp=urllib2.urlopen(url)
 	page=resp.read()
 	resp.close()
