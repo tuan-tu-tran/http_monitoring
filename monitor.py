@@ -5,10 +5,23 @@ logging.config.fileConfig("config_logging.ini")
 
 import logging
 logger=logging.getLogger("http_monitor")
+
+def configure_mail(config):
+	handler=logging.handlers.SMTPHandler(
+		config.get("mail","host"),
+		config.get("mail","from"),
+		config.get("mail","to"),
+		config.get("mail","subject"),
+	)
+	logger.addHandler(handler)
+	handler.setLevel(logging.WARN)
+
 try:
 	import ConfigParser
 	config=ConfigParser.SafeConfigParser()
 	config.read(["config.ini", "config_custom.ini"])
+	configure_mail(config)
+
 	url=config.get("general","url")
 	with open(config.get("general","template")) as fh:
 		template=fh.read()
