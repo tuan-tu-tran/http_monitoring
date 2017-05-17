@@ -16,14 +16,18 @@ def configure_mail(config):
 	logger.addHandler(handler)
 	handler.setLevel(logging.WARN)
 
-try:
+def main():
 	import ConfigParser
 	config=ConfigParser.SafeConfigParser()
 	config.read(["config.ini", "config_custom.ini"])
 	configure_mail(config)
 
 	url=config.get("general","url")
-	with open(config.get("general","template")) as fh:
+	template = config.get("general","template")
+	process(url, template)
+
+def process(url, templateFile):
+	with open(templateFile) as fh:
 		template=fh.read()
 	import urllib2
 	import datetime
@@ -48,6 +52,9 @@ try:
 		extra,
 	)
 	log(msg)
+
+try:
+	main()
 except:
 	import traceback
 	s=traceback.format_exc()
