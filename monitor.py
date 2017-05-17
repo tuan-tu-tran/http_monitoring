@@ -6,6 +6,8 @@ logging.config.fileConfig("config_logging.ini")
 import logging
 logger=logging.getLogger("http_monitor")
 
+import os
+
 def configure_mail(config):
 	handler=logging.handlers.SMTPHandler(
 		config.get("mail","host"),
@@ -22,12 +24,16 @@ def main():
 	config.read(["config.ini", "config_custom.ini"])
 	configure_mail(config)
 
-	url=config.get("general","url")
-	template = config.get("general","template")
-	process(url, template)
+	templateFolder="downloads"
+	if not os.path.exists(templateFolder):
+		os.mkdir(templateFolder)
+
+	for key, value in config.items("urls"):
+		url=value
+		template = os.path.join(templateFolder, "%s-template.html"%key)
+		process(url, template)
 
 def process(url, templateFile):
-	import os
 	if os.path.exists(templateFile):
 		with open(templateFile) as fh:
 			template=fh.read()
